@@ -4,6 +4,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 
+import org.hibernate.bugs.model.Parent;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -31,7 +32,10 @@ public class JPAUnitTestCase {
 	public void hhh123Test() throws Exception {
 		EntityManager entityManager = entityManagerFactory.createEntityManager();
 		entityManager.getTransaction().begin();
-		// Do stuff...
+		Parent parent = new Parent();
+		parent.setId(1L);
+		//when merging hibernate core calls a load that retrieves also data from the first child (Child and not Nephew) - see hibernate logs
+		entityManager.merge(parent);
 		entityManager.getTransaction().commit();
 		entityManager.close();
 	}
